@@ -1,0 +1,24 @@
+{% load static %}
+{%if related_posts%}
+<h4 class="p-title"><b>TRENDING NOW</b></h4>
+{% for post in related_posts %}
+  <a class="oflow-hidden pos-relative mb-20 dplay-block" href="{% url "getpost"  post.topic %}">
+    <div class="wh-100x abs-tlr">
+      {%if post.photos %}
+        <img src= "{{post.photos.url}}" height='80' width="50" alt=""/>
+      {%endif%}
+    </div>
+    <div class="ml-120 min-h-100x">
+      <h5><b>{{post.topic}}</b></h5>
+      <h6 class="color-lite-black pt-10">
+        <span id="momentum">
+          {{ post.last_modified | date:"Y-m-d H:i:m" }}
+        </span>
+        <i class="fa fa-flash"></i>? <i class="fa fa-comments"></i>
+      </h6>
+    </div>
+  </a><!-- oflow-hidden -->
+{% endfor %}
+{%endif%}
+
+

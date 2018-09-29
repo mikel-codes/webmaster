@@ -1,0 +1,33 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <title>{% block title %}{% if title %} {{title}} {%else%} Tango home{%endif%} {%endblock%}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css"%}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css"%}"/>
+  
+  </head>
+
+  <body class="regbody">
+    <div class="row">
+      {%block content%}
+      {% endblock %}
+    </div>
+    <script src="{% static "js/jquery.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "js/links.js" %}" type="text/javascript"></script>
+    <script type="text/javascript" src='{% static "js/bootstrap.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/popper.min.js" %}'></script>
+    <script type="text/javascript" src="{% static "js/jquery.backstretch.min.js" %}">
+    </script>
+    <script>
+      $.backstretch("{% static "images/clouds.png" %}", {
+          speed: 600
+      });
+    </script>
+  </body>
+</html>
+
+

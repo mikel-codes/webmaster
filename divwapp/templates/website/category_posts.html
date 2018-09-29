@@ -1,0 +1,44 @@
+{# template "website/category_posts.html" #}
+{% extends "layouts/category.html" %}
+{%block title%}
+  {{category.name}}
+{%endblock%}
+
+{%block content %}
+{%if not posts_by_category %}
+<div class="jumbotron text-center bg-light">
+  <h3 class="h3">Nothing to Show Yet</h3>
+  <p> If you have reasonable posts you can join our community to update us </p>
+  <p>Thanks ;::</p>
+</div>
+{%else%}
+  <h4 class="p-title mt-50"><b>{{category.name}}</b></h4>
+  <div class="row">
+    {%for post in posts_by_category %}
+      <div class="col-sm-4">
+         <a href="{% url "getpost" post.topic %}">
+        {% if post.photos %}
+          <img src="{{post.photos.url}}" alt="" height="200" width="450">
+        {%endif%}
+        <h4 class="pt-20">
+         
+            <b>{{post.topic}}</b>
+          </a>
+        </h4>
+        <ul class="list-li-mr-20 pt-10 mb-30">
+          <li class="color-lite-black">
+            <a href="{% url "getpost" post.topic %}" class="color-black"></a>
+            <span id="momentum">  
+              {{ post.last_modified | date:"Y-m-d H:i:m"}}
+            </span>
+          </li>
+          <li>
+            <i style="color: #4ECDC4;" class="color-primary mr-5 font-12 fa fa-flash"></i>30,190
+          </li>
+          <li><i class="color-primary mr-5 font-12 fa fa-comment"></i>47</li>
+        </ul>
+      </div><!-- col-sm-4 -->
+    {% endfor %}
+  </div>
+  {%endif%}
+{%endblock%}

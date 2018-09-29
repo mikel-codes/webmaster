@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{%load static%}
+<html>
+  <head>
+    <title>{%block title%}{%endblock%}</title>
+    {% include "includes/website_index/static_files.html" %}
+  </head>
+  <body>
+    <header>
+      {%include "includes/website_index/navs.html" %}
+    </header>
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="brdr-ash-1 opacty-5"></div>
+
+            {% block content %}
+
+            {% endblock %}
+          </div>
+        </div>
+      
+      <div class="d-none d-md-block d-lg-none col-md-3"></div>         
+      <div class="col-md-6 col-lg-4">
+        <div class="pl-20 pl-md-0">
+          <div class="mtb-50">
+            {% include "includes/website_index/related_posts.html" %}
+          </div>
+        </div>
+      </div>
+
+    </section>
+    <footer>
+      {%include "includes/website_index/footer.html" %}
+    </footer>
+  </body>
+</html>

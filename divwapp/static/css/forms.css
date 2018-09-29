@@ -1,0 +1,112 @@
+body{
+  font-family: "Lato","Helvetica Neue","Helvetica";
+  background: #fff;
+}
+
+
+
+.form-group{
+  margin-bottom: 30px;
+}
+
+.form-group  label{
+  position: absolute;
+  top:14px;
+  font-size: 15px;
+  color: #444;
+  z-index: 2;
+  cursor: text;
+  margin: 0;
+  outline:0;
+  transition: transform 150ms ease-out, font-size 150ms ease-out, color 0.2s ease-out;   
+}
+
+
+.bmd-form-group  .form-control {
+  background: no-repeat center bottom, center calc(100% - 1px);
+  background-size: 0 100%, 100% 100%;
+  border: 0;
+  outline:0;
+  height: 36px;
+  transition: background 0s ease-out;
+  padding-left: 5px;
+  padding-right: 0;
+  border-radius: 0px 0px 0px 0px;
+
+  font-size: 14px;
+}
+
+
+.form-control:focus{
+  box-shadow: none;
+  outline:0;
+  box-shadow: none;
+  background-color: rgba(0,0,0,0);
+}
+
+.form-group .focused .form-control, .form-group .focused .reginput{
+  padding-top: 2px;
+  background: linear-gradient(to top, #9c27b0 2px, rgba(156, 39, 176, 0) 2px), linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
+  transition-duration: 0.2s;
+}
+
+/*.form-control:focus,  .reginput:focus{
+
+  box-shadow: 0 0 2px 0px red;
+  bottom: 1px solid blue; 
+  background-image: linear-gradient(to top, indigo 2px, rgba(156, 39, 176, 0) 2px), linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
+  transition-duration: 0.2s;
+
+
+}*/
+
+.focused label{
+  content: "";
+  color: indigo;
+  font-size:0.75em;
+  transform: translateY(-100%);
+  text-transform: uppercase;
+  transition: transform 0.1s ease-out;
+}
+
+
+
+
+
+.bmd-form-group .form-control, .bmd-form-group label, .bmd-form-group input::placeholder {
+  line-height: 1.1;
+}
+
+
+
+
+
+.ribben {
+  position: absolute;
+  top: -6%;
+  left: -3%;
+  padding: 0.4em;
+  background: #928388;
+  width: auto;
+  z-index: 2;
+  float: right;
+}
+.ribben p {
+  font-size: 1em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.ribben::after {
+  content: '';
+  position: absolute;
+  top: 90%;
+  right: 77%;
+  width: 0;
+  height: 0;
+  border-top: 24px solid #928388;
+  border-right: 14px solid transparent;
+  border-left: 3px solid transparent;
+  transform: rotate(96deg);
+}
+

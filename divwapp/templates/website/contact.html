@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8" name='viewport' content="width=device-width,
+        initial-scale=1, shrink-to-fit=no"/>
+    <title>{%block title%} Contact Us{%endblock%} </title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css"%}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css"%}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/styles.css"%}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css"%}"/>
+
+  </head>
+  <body>
+    <header>
+      {% include "includes/website_index/navs.html" %}
+    </header>
+
+    <section>
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-sm-12 col-md-8">
+             {% include "includes/alerts.html" %}
+
+
+            <h3><b>SEND US A MESSAGE</b></h3>
+            <p class="mb-30 mr-100 mr-sm-0">We’d love to hear from you – 
+              <em><strong>please get in touch for comments, requests, 
+              advertising, partnerships or job inquiries.</strong></em>
+            </p>
+            <form class="form-block form-bold form-mb-20 form-h-35 form-brdr-b-grey pr-50 pr-sm-0" method="post" action="">
+
+
+              <div class="row">
+
+                {%if form.errors %}
+                  <div class="col-sm-12 ">
+                    <div class="alert alert-danger">
+                      <p> could not send this message</p>
+                    </div>
+                  </div>
+                {%endif%}
+
+
+
+
+
+                {% csrf_token%}
+
+                {% for field in form.visible_fields %}
+                  {%if field.label == "Message"%}
+                    <div class="col-sm-12">
+                      <div class="pos-relative pr-80">
+                        <p class="color-ash">{{field.label_tag}}</p>
+                        <h4><b>Tell us about your question</b></h4>
+                        {{field}}
+                        {{field.errors}}
+
+                      </div><!-- pos-relative -->
+                    </div><!-- col-sm-6 -->
+                  {% else %} 
+                    <div class="col-sm-6">
+                      <p class="color-ash">{{field.label_tag}}*</p>
+                      <div class="pos-relative">
+                        {{field}}	
+                      </div><!-- pos-relative -->
+                      {{field.errors}}
+                    </div><!-- col-sm-6 -->
+                  {%endif%}
+                {% endfor %}
+                <button class="abs-br font-20 plr-15 btn-fill-primary" type="submit">submit</button>
+              </div><!-- row -->
+            </form>
+          </div><!-- col-md-6 -->
+
+
+          <div class="col-sm-12 col-md-4">
+            <h3 class="mb-20 mt-sm-50"><b>INFORMATION</b></h3>
+
+            <ul class="font-11 list-relative list-li-pl-30 list-block list-li-mb-15">
+
+              <li><i class="abs-tl fa fa-envelope-o"></i>
+                gatezdomain@gmail.com</li>
+              <li><i class="abs-tl fa fa-phone"></i>
+                (+234)-708-751-7646</li>
+            </ul>
+            <ul class="font-11  list-a-plr-10 list-a-plr-sm-5 list-a-ptb-15 list-a-ptb-sm-5">
+              <li><a class="pl-0" href="#"><i class="ion-social-linkedin"></i></a></li>
+              <li><a href="#"><i class="ion-social-facebook"></i></a></li>
+              <li><a href="#"><i class="ion-social-twitter"></i></a></li>
+              <li><a href="#"><i class="ion-social-google"></i></a></li>
+              <li><a href="#"><i class="ion-social-pinterest"></i></a></li>
+            </ul>
+
+          </div><!-- col-md-6 -->
+        </div><!-- row -->
+
+      </div><!-- container -->
+
+    </section>
+    {% include "includes/website_index/footer.html" %}
+
+  </body>
+</html>

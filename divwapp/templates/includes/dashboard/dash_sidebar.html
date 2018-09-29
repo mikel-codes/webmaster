@@ -1,0 +1,75 @@
+{%load static %}
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    $(".nav > p").each(function(){
+      if ($(this).on('click',function() {
+        $(this).css({"color": "#3c4858;"});
+    })
+  })
+    })
+  });
+  </script>
+<ul class="nav">
+  <li class="nav-item active">
+    {% if profile.picture %}
+      <p class="centered">
+        <img src="{{ profile.picture.url  }}" width="100" height="100" class="rounded-circle">
+      </p>
+
+      <p class="centered">
+        {{ profile.bio}}
+      </p>
+    {%else%}
+      <p class="centered">
+        <img src="{% static "images/fr-05.jpg" %}" width="100" height="100" class="rounded-circle">
+        </p>
+        {%endif%}
+
+  
+      </li>
+      <li>
+        <p>
+          <h5 class="centered">{{ request.user.get_full_name }} </h5>
+        </p>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{% url "dashboard" request.user %}">
+          <i class="fa fa-tasks"></i>
+          <p>Dashboard</p>
+        </a>
+      </li>
+
+      <li class="nav-item ">
+        <a class="nav-link"  href="{% url "edit_profile" %}">
+          <i class="fa fa-microphone"></i>
+          <p>About Profile </p>
+        </a>
+      </li>
+       <li class="navbar-form nav-item ">
+        <a class="nav-link"  href="{% url "reset_password" %}">
+          <i class="fa fa-key"></i>
+          <p>Change Password </p>
+        </a>
+      </li>
+
+        <li class="navbar-form nav-item ">
+        <a class="nav-link"  href="{% url "logout" %}">
+          <i class="fa fa-sign-out"></i>
+          <p>Logout </p>
+        </a>
+      </li>
+
+ </ul>
+ 
+  <!-- sidebar menu start-->
+
+
+
+
+
+
+
+
+
+
+
