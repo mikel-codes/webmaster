@@ -17,7 +17,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage, send_mail, BadHeaderError
-from django.db.models.functions import Lower
+
 
 
 from .forms import  SignUpForm, ResetPasswordForm, PostForm, ProfileForm, ContactForm
@@ -186,7 +186,7 @@ def reset(request):
 @login_required(login_url = "signin")
 def dashboard(request,  pk):
 	user = get_object_or_404(User, username=pk)
-	posts = Post.objects.filter(post_by=user.id).order_by(Lower("last_modified").desc())
+	posts = Post.objects.filter(post_by=user.id).order_by("-last_modified")
 	count = posts.count()
 	try:	
 		profile = get_object_or_404(UserProfile, author=user)
