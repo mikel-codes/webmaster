@@ -3,7 +3,7 @@ import re
 from django import forms 
 
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import send_mail, BadHeaderError, EmailMessage
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from PIL import Image
@@ -167,11 +167,10 @@ class ContactForm(forms.Form):
     def save(self):
         cleaned_data = self.cleaned_data
         try:
-            send_mail(
+            EmailMessage(
                 subject=ugettext("DivWEB:: A message from %s") % cleaned_data['full_name'],
                 message = ("%s \n Company Name =:> %s \n Phone: %s") % (cleaned_data["message"], cleaned_data['company'], cleaned_data['phone']),
-                from_email=cleaned_data['sender_email'],
-                recipient_list=['gatezdomain@gmail.com'])
+                to=['gatezdomain@gmail.com']).send()
         except BadHeaderError:
             raise forms.ValidationError("Invalid Header Found")
             
