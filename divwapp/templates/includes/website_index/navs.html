@@ -67,15 +67,19 @@
       <a class="menu-nav-icon "  data-menu="#main-menu" href="#">
         <i class="fa fa-bars"></i>
       </a>
-      
+      <script type="text/javascript">
+      function myFunction(x) {
+        x.toggleClass("active")
+      }
+      </script>
       <ul class="main-menu" id="main-menu">
-        <li><a href="{% url "indexpage" %}">HOME</a></li>
+        <li><a class="p" onclick="myFunction(x)" href="{% url "indexpage" %}">HOME</a></li>
      
           
         
-        <li><a href="{% url "contact" %}">CONTACT US</a></li>
-        <li><a href="{% url "reg"%}">JOIN OUR COMMUNITY</a></li>
-        <li><a href="{% url "signin" %}">LOGIN</a></li>
+        <li><a class="" href="{% url "contact" %}">CONTACT US</a></li>
+        <li><a class="" href="{% url "reg"%}">JOIN OUR COMMUNITY</a></li>
+        <li><a class="" href="{% url "signin" %}">LOGIN</a></li>
       </ul>
       <div class="clearfix"></div>
     </div>
