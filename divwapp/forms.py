@@ -171,8 +171,8 @@ class ContactForm(forms.Form):
                 ugettext("A message from %s") % cleaned_data['full_name'],
                 "%s \n Company Name =:> %s \n Phone: %s \n Email: %s" % (cleaned_data["message"], cleaned_data['company'], cleaned_data['phone'], cleaned_data['sender_email']),
                 "DIVWEB" + "",
-                to=['gatezdomain@gmail.com'],
-                headers = {'Reply-To': cleaned_data['sender_email'] }).send()
+                to=['gatezdomain@gmail.com']
+                ).send()
         except BadHeaderError:
             raise forms.ValidationError("Invalid Header Found")
             
