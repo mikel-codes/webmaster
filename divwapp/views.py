@@ -29,7 +29,10 @@ from .models import Post, UserProfile, Category
 # Create your views here.
 
 def index(request):
-    head_post = Post.objects.latest()
+    try:
+        head_post = Post.objects.latest()
+    except:
+        head_post = None
     top_posts = Post.objects.order_by("topic", 'category','last_modified').exclude(pk=head_post.id)[:6]
     recent_posts = Post.objects.all().exclude(pk=head_post.id)[0:10]
     related_posts_first = Post.objects.filter(category=head_post.category).order_by("topic", "last_modified").exclude(pk=head_post.id)[:2]
