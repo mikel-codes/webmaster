@@ -2,7 +2,7 @@
 {%if related_posts%}
 <h4 class="p-title"><b>TRENDING NOW</b></h4>
 {% for post in related_posts %}
-  <a class="oflow-hidden pos-relative mb-20 dplay-block" href="{% url "getpost"  post.topic %}">
+  <a class="oflow-hidden pos-relative mb-20 dplay-block" href="{% url "getpost"  post.slug %}">
     <div class="wh-100x abs-tlr">
       {%if post.photos %}
         <img src= "{{post.photos.url}}" height='80' width="50" alt=""/>

@@ -43,15 +43,15 @@ def index(request):
 
 
 
-def list_posts(request, pk=None):
-    category = get_object_or_404(Category, name=pk)
+def list_posts(request, cat_name=None):
+    category = get_object_or_404(Category, name=cat_name)
     posts_by_category = Post.objects.filter(category=category)
     head_post = Post.objects.all().first()  
     categories = Category.objects.all()
     return render(request, "website/category_posts.html", locals())
 
-def getpost(request, pk=None):
-    req_post = get_object_or_404(Post, topic=pk)
+def getpost(request, slug=None):
+    req_post = get_object_or_404(Post, slug=slug)
     posts    = Post.objects.all().exclude(pk=req_post.id)[:6]
     related_posts = Post.objects.filter(category=req_post.category).exclude(pk=req_post.id)[:6]
     categories = Category.objects.all()
@@ -187,8 +187,8 @@ def reset(request):
     pass
 
 @login_required(login_url = "signin")
-def dashboard(request,  pk):
-	user = get_object_or_404(User, username=pk)
+def dashboard(request,  username):
+	user = get_object_or_404(User, username=username)
 	posts = Post.objects.filter(post_by=user.id).order_by("-last_modified")
 	count = posts.count()
 	try:	
@@ -205,33 +205,19 @@ def userlogout(request):
     logout(request)
     return redirect(reverse("signin"))
 
-@login_required 
-def message_to_user(request):
-    """ to send emails only for authorized persons"""
-    from forms import MessageForm 
-    if request.POST:
-        msgForm = MessageForm(request, data=request.POST)
-        if msgForm.is_valid():
-            msgForm.save()
-    else:
-        msgForm = MessageForm(request)
-    context = {"msgForm" : msgForm}
-    return render(request, "email_user.html", context)
 
 
 @login_required(login_url="signin")
 def create_content(request):
     """ Create content to be displayed"""
     if request.method == "POST":
-        form = PostForm(request.POST, request.FILES)    
+        form = PostForm(request, request.POST, request.FILES)    
         if form.is_valid():
-            obj_form = form.save(commit=False)
-            obj_form.post_by = request.user
-            obj_form.save()
+            form.save()
             messages.info(request, "Your post was added successfully")
             return redirect(reverse("dashboard", args=(request.user.username,)))
     else:
-        form = PostForm()
+        form = PostForm(request)
 
     return render(request, "dashboard/user_content.html", {'form': form, 'subvalue':"Create Post"})
 
@@ -239,11 +225,9 @@ def create_content(request):
 @login_required(login_url='signin')
 def edit_post(request, pk):
    post = get_object_or_404(Post, pk=pk)
-   form = PostForm(request.POST or None,request.FILES or None, instance=post)
+   form = PostForm(request, request.POST or None,request.FILES or None, instance=post)
    if form.is_valid():
-        obj_form = form.save(commit=False)
-        obj_form.post_by = request.user
-        obj_form.save()
+        form.save()
         messages.info(request, "Post is updated successfully")
         return redirect(reverse("dashboard", args=(request.user.username,)))
    return render(request, "dashboard/user_content.html", {'form': form, 'subvalue': "Update Post", "post":post})
