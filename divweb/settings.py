@@ -140,11 +140,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
    
 EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_HOST_USER = os.environ.get('apikey')
-EMAIL_HOST_PASSWORD = os.environ.get('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')
+EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME')
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'mikeunadike@gmail.com'
+
 
 django_heroku.settings(locals())
 
