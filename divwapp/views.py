@@ -130,7 +130,8 @@ def registration(request):
                 })
 
             to_email = signupform.cleaned_data.get('email')
-            email=EmailMessage( mail_subject, mail_message, to=[to_email] )
+            email=EmailMessage( mail_subject, mail_message, to=[to_email] ,
+                 headers = {'Reply-To': 'noreply@divweb.com'})
             email.send()
             return HttpResponse('Please check email')
 
