@@ -130,8 +130,8 @@ def registration(request):
                 })
 
             to_email = signupform.cleaned_data.get('email')
-            send_mail( mail_subject, mail_message, "gatezdomain@gmail.com",[to_email], fail_silently=False)
-
+            email=EmailMessage( mail_subject, mail_message, to=[to_email] )
+            email.send()
             return HttpResponse('Please check email')
 
     else: 
