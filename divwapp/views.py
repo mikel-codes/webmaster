@@ -89,7 +89,6 @@ def email_password_reset(request):
         })
         EmailMessage("Please use the Reset link ",
             message,
-            ['boss.com'],
             to=[email]
             ).send()
     except (BadHeaderError, ValueError, Exception):
