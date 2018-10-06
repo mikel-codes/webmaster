@@ -138,7 +138,7 @@ class ProfileForm(forms.ModelForm):
 class ContactForm(forms.Form):
     subject = forms.CharField(max_length=100, required=True)
     full_name = forms.CharField(required=True)
-    company = forms.CharField(required=True)
+    company = forms.CharField(required=True, help_text='if you dont have, please enter none')
     phone = forms.CharField(validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Enter a valid phone number")],
                              required=True)
     sender_email = forms.EmailField(label=_("Your Email"), required=True)
@@ -147,12 +147,18 @@ class ContactForm(forms.Form):
     def save(self):
         cleaned_data = self.cleaned_data
         try:
+            mail_message = render_to_string("contact_mail.html",{
+            "contact_email": cleaned_data['sender_email'],
+            "contact_name" : cleaned_data['full_name'],
+            "contact_company": cleaned_data['company'],
+            "contact_phone" : cleaned_data['phone'],
+            "form_content": cleaned_data['message']
+            })
             EmailMessage(
-                ugettext("A message from %s ") % cleaned_data['full_name'],
-                "Your Received Email \n\n %s \n Company Name =:> %s \n Phone: %s \n Email: %s" % (cleaned_data["message"], cleaned_data['company'], cleaned_data['phone'], cleaned_data['sender_email']),
-                from_email=cleaned_data['email'],
+                "New ContactForm Submission Tagged %s" % cleaned_data['subject'],
+                mail_message,
                 to=['gatezdomain@gmail.com'],
-                headers = {'Reply-To': cleaned_data['email'] }
+                headers = {'Reply-To': cleaned_data['sender_email'] }
                 ).send()
         except BadHeaderError:
             raise forms.ValidationError("Invalid Header Found")
