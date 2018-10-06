@@ -148,9 +148,11 @@ class ContactForm(forms.Form):
         cleaned_data = self.cleaned_data
         try:
             EmailMessage(
-                ugettext("A message from %s") % cleaned_data['full_name'],
-                "%s \n Company Name =:> %s \n Phone: %s \n Email: %s" % (cleaned_data["message"], cleaned_data['company'], cleaned_data['phone'], cleaned_data['sender_email']),
-                to=['gatezdomain@gmail.com']
+                ugettext("A message from %s ") % cleaned_data['full_name'],
+                "Your Received Email \n\n %s \n Company Name =:> %s \n Phone: %s \n Email: %s" % (cleaned_data["message"], cleaned_data['company'], cleaned_data['phone'], cleaned_data['sender_email']),
+                from_email=cleaned_data['email'],
+                to=['gatezdomain@gmail.com'],
+                headers = {'Reply-To': cleaned_data['email'] }
                 ).send()
         except BadHeaderError:
             raise forms.ValidationError("Invalid Header Found")
