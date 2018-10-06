@@ -46,11 +46,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'divwapp',
+    'django.contrib.sites',
+
     # Disable Django's own staticfiles handling in favour of WhiteNoise, for
     # greater consistency between gunicorn and `./manage.py runserver`. See:
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
+    'disqus'
 ]
+
+DISQUS_API_KEY = "FUzRd6wV6uqc77PUSVZZAMS8XecYSp249BW8A4JiRn8RXlKB20SHQD0vSvXl3exk"
+DISQUS_WEBSITE_SHORTNAME = "divweb-project-herokuapp-com"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
