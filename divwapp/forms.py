@@ -5,6 +5,7 @@ from django import forms
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.core.mail import send_mail, BadHeaderError, EmailMessage
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.utils.text import slugify
 from PIL import Image
