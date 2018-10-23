@@ -5,11 +5,11 @@
 {%endblock%}
 {% block content %}
 
-  {% autoescape on %}
+ 
     <h3 class="mt-30"><b>{{req_post.topic}}</b></h3>
     <ul class="list-li-mr-20 mtb-15">
       <li>
-        by <b>{{ author | capfirst }} </b>
+        by <b>{{ author | capfirst | safe }} </b>
         {{ req_post.last_modified }}
       </li>
       <li>
@@ -20,12 +20,12 @@
       </li>
     </ul>
 
-    <img src="{{ req_post.photos.url }}" alt=""  height="500" width="450" />
+    <img src="{{ req_post.photos.url }}" alt=""  height="400" width="400" />
 
 
-    <h4><b>{{req_post.header1}}</b></h4>
-    <p class="mtb-15" style="color:#222">{{ req_post.content}}</p>
-  {% endautoescape%}
+    <h4><b>{{req_post.header1 |safe}}</b></h4>
+    <p class="mtb-15" style="color:#222">{{ req_post.content | safe }}</p>
+ 
 {% endblock %}
 
 {% block disqus %}

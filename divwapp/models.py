@@ -57,13 +57,16 @@ class Post(TimeStampsMixin):
     content  = models.TextField(_("Content"), max_length=10000)
     slug     = models.SlugField(unique=True, null=True, blank=True)
     photos   = models.ImageField(upload_to=storagedir)
-    links    = models.URLField(blank=True, null=True)
     post_by  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    
     
     class Meta:
         verbose_name='Post'
         verbose_name_plural="Posts"
         get_latest_by = "id"
+
+
 
 
     def __str__(self):
@@ -72,6 +75,7 @@ class Post(TimeStampsMixin):
     def __unicode__(self):
         return self.topic
 
+    
 
 
 

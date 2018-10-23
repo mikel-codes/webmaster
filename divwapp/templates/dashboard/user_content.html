@@ -1,20 +1,21 @@
 {# template 'users/create_content'#}
 {% extends "layouts/dashboard.html" %}
 {% block content %}
-
     {%load i18n %}
 {% comment %}Translators: View verb{% endcomment %}
-  <div class="col-md-12 col-lg-12">
-    <h3><i class="fa fa-angle-right"></i> Post A Content To Viewers </h3>
-  <div class="form-panel">
+
+    
+     
+    <h3><i class="fa fa-pencil"></i> Post A Content To Viewers </h3>
+  <div class="form-panel" style="width: 100%;">
 <style type="text/css">
   label{
-    color: black;
+    color: #333;
     font-weight: 300px;
   }
 </style>
   <div class="form-panel">
-    <form method="post" action="" enctype="multipart/form-data">
+    <form method="post" class="form-horizontal" action="" enctype="multipart/form-data">
       {% csrf_token %}
       {% if form.errors%}
         <p class="alert alert-danger centered"> 
@@ -23,28 +24,41 @@
       {% endif %}
    
         <legend>{{legend | upper}}</legend>
-   <div class="vertical-form">
+   
         {%for field in form.visible_fields %}
+ 
           <div class='form-group'>
-            <div class="control" style="color:black">
+            <div class="control-sm-label" style="color:black">
               {{field.label_tag}}
             </div>
-
-            {{field}}
-            {{field.help_text}}
-
+             {{field}}
+             {{field.help_text}}
             <ul>
               <li style="color:indianred;"><small>{{field.errors}}</small></li>
             </ul>
           </div>
-
+       
         {% endfor %}
+
+
+
     
         <input type="submit" class="btn btn-primary" value="Save">
       </div>
     </form>
   </div>
 
-</div>
+
+
+ <script type="text/javascript">
+    //wysihtml5 start
+    jQuery(document).ready(function($){
+     
+          $('.wysihtml5').wysihtml5();
+    });
+
+
+    //wysihtml5 end
+  </script>
 
 {% endblock %}

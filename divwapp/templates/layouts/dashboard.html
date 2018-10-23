@@ -2,13 +2,14 @@
 {%load static%}
 <html class="perfect-scrollbar-off nav-close" lang="en">
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta charset="utf-8" name="viewport" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <meta charset="utf-8" >
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
     <title>{{request.user.username}}'s dashboard</title>
     {%include "includes/dashboard/dash_static_files.html"%}
+    
   </head>
 
   <body class=""> 
@@ -47,8 +48,9 @@
               <div class="offset-md-9 col-md-3 col-sm-0  mb">
                 <a href="{% url "new_content" %}">  
                   <button class='btn btn-success'>
-                    click to create a new post
+                    
                     <span class="fa fa-plus"></span>
+                     Add Post
                   </button>
                 </a>
               </div>

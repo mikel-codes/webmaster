@@ -34,7 +34,7 @@ DEBUG = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Allow all host headers
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '.herokuapp.com']
 
 # Application definition
 
@@ -46,13 +46,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'divwapp',
-    'django.contrib.sites',
+  
 
     # Disable Django's own staticfiles handling in favour of WhiteNoise, for
     # greater consistency between gunicorn and `./manage.py runserver`. See:
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
-    'disqus'
+   
 ]
 
 DISQUS_API_KEY = "FUzRd6wV6uqc77PUSVZZAMS8XecYSp249BW8A4JiRn8RXlKB20SHQD0vSvXl3exk"
@@ -145,7 +145,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-   
+
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME')
 EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
@@ -154,7 +154,11 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'info@divweb.com'
 
 django_heroku.settings(locals())
-
+"""
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+DEFAULT_FROM_EMAIL = 'info@divweb.com'
+"""
 """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True

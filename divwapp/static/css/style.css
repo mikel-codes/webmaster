@@ -5,6 +5,11 @@ font-size: 13px;
 word-wrap: break-word;
 font-family: 'Ruda', "Lato Medium";
 }
+.row div a{
+line-height: 1.7;
+font-size: 1.05em;
+font-weight: 400;
+}
 
 input, select, h1, h2, h3, legend{
 font-family: 'Ruda', "Lato Medium";

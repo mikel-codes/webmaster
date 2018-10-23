@@ -57,7 +57,7 @@ class ResetPasswordForm(SetPasswordForm):
 class PostForm(forms.ModelForm):
     """ create a form to generate Posts"""
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Please Select A Category")
-    content  = forms.CharField(min_length=100, widget=forms.Textarea(attrs={"class":"form-control"}))
+    content  = forms.CharField(min_length=100, widget=forms.Textarea(attrs={"class":"wysihtml5  form-control", 'rows':"30"}))
     header1  = forms.CharField(label=_("First Heading"),validators=[RegexValidator(regex=r'^[\w\s_\d\.\&]+$', message="Invalid characters used")],
                              required=False, widget=forms.TextInput(attrs={'class':"form-control round-form"}), help_text='please use letters or numbers  and spaces',)
     post_by= forms.ModelChoiceField(label=_("Author"), widget=forms.HiddenInput, queryset=User.objects.all(),required=False, initial='p')
@@ -93,7 +93,8 @@ class PostForm(forms.ModelForm):
 
     def save(self, commit=True):
         your_post = super(PostForm, self).save(commit=False)
-        your_post.slug = slugify(self.cleaned_data['topic'])
+        if your_post.slug is None or "":
+            your_post.slug = slugify(self.cleaned_data['topic'])
         your_post.post_by = self.request.user
         if commit:
             your_post.save()

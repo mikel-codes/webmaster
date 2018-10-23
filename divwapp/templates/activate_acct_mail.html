@@ -1,4 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
 {% autoescape on %}
-Hi {{user.username}}
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+<h2>Hi {{user.get_full_name}}</h2>
+<p><strong>USE THIS LINK TO COMPLETE YOUR EMAIL REGISTRATION</strong>
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}</p>
 {% endautoescape %}
+</body>
+</html>

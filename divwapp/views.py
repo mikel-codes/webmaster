@@ -60,7 +60,7 @@ def getpost(request, slug=None):
     try:
         profile = get_object_or_404(UserProfile, pk=req_post.post_by)
     except:
-        profile=None
+        profile="Anonymous"
     return render(request, "website/requested_post.html", locals())
 
 
@@ -87,12 +87,14 @@ def email_password_reset(request):
             "uid" : urlsafe_base64_encode(force_bytes(user.pk)).decode(),
             "token" : account_activation_token.make_token(user)
         })
-        EmailMessage("Please use the Reset link ",
+
+        mail = EmailMessage("Please use the Reset link ",
             message,
-            to=[email]
-            ).send()
-    except (BadHeaderError, ValueError, Exception):
-        messages.info(request,"sent link to email ! Bross Pls remember to check me before sending")
+            to=[email],headers = {'Reply-To': 'noreply@divweb.com'}
+            )
+        mail.send()
+    except(BadHeaderError, ValueError, Exception):
+        messages.info(request,"sent link to email ")
         return redirect("signin")
     else:
         messages.info(request, "Sent Link to Email Address ")
@@ -120,7 +122,7 @@ def registration(request):
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            mail_subject = "Please Confirm Your Email To Activate Your Account :)"
+            mail_subject = "Account Activation"
 
             mail_message = render_to_string("activate_acct_mail.html", {
                 'user': user,
@@ -133,7 +135,7 @@ def registration(request):
             email=EmailMessage( mail_subject, mail_message, to=[to_email] ,
                  headers = {'Reply-To': 'noreply@divweb.com'})
             email.send()
-            return HttpResponse('Please check email')
+            return HttpResponse('PLEASE CHECK EMAIL FOR FURTHER INSTRUCTIONS')
 
     else: 
         signupform = SignUpForm()
