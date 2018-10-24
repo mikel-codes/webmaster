@@ -25,7 +25,9 @@
 
     <h4><b>{{req_post.header1 |safe}}</b></h4>
     <p class="mtb-15" style="color:#222">{{ req_post.content | safe }}</p>
- 
+    <a href="{{req_post.absolute_url}}#disqus_thread"> Post A Comment </a>
+ <script id="dsq-count-scr" src="//divweb-project-herokuapp-com.disqus.com/count.js" async></script>
+
 {% endblock %}
 
 {% block disqus %}
