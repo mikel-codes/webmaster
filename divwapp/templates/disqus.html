@@ -6,8 +6,8 @@
 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
 var disqus_config = function () {
-this.page.url = "https://divweb-project.herokuapp.com/site/home/";  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = "{{ reqpost.slug}}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+this.page.url = "https://divweb-project.herokuapp.com/site/home/{{req_post.slug}}";  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = "{{ req_post.slug }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
@@ -19,8 +19,8 @@ s.setAttribute('data-timestamp', +new Date());
   DISQUS.reset({
   reload: true,
   config: function () {  
-    this.page.identifier = "{{reqpost.slug}}";  
-    this.page.url = "https://divweb-project.herokuapp.com/site/home/#!newthread";
+    this.page.identifier = "{{req_post.slug}}";  
+    this.page.url = "https://divweb-project.herokuapp.com/site/home/{{req_post.slug}}";
   }
 });
 </script>
