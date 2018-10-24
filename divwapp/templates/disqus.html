@@ -1,3 +1,4 @@
+<!---
 <div id="disqus_thread"></div>
 <script>
 
@@ -19,4 +20,11 @@ s.setAttribute('data-timestamp', +new Date());
 
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+ -->
 
+
+{% load disqus_tags %}
+# get comments for your website
+{% disqus_show_comments "divweb-project-herokuapp-com" %}
+# get the url for the current object to get the right comments
+{% set_disqus_url req_post.get_absolute_url %}
