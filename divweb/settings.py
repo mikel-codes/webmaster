@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
- 
+
     'divwapp',
   
 
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
     'whitenoise.runserver_nostatic',
     'disqus',
+    'django.contrib.sites',
 ]
 
 DISQUS_API_KEY = "FUzRd6wV6uqc77PUSVZZAMS8XecYSp249BW8A4JiRn8RXlKB20SHQD0vSvXl3exk"
