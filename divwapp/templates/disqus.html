@@ -24,7 +24,5 @@ s.setAttribute('data-timestamp', +new Date());
 
 
 {% load disqus_tags %}
-# get comments for your website
 {% disqus_show_comments "divweb-project-herokuapp-com" %}
-# get the url for the current object to get the right comments
 {% set_disqus_url req_post.get_absolute_url %}
