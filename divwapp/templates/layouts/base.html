@@ -17,10 +17,7 @@
     <section>
 
       <div class="container">
-         <div class="row">
-            {% block disqus %}
-            {%endblock%}
-          </div>
+     
         <div class="row">
           <div class="col-md-12 col-lg-8">
             {% block content %}
@@ -32,7 +29,13 @@
                     {{ post.last_modified }}</li>
                   <li><i class="color-primary mr-5 font-12 fa fa-flash"></i>30,190</li>
                   <li>
-                     {% include "includes/website_index/comment_svg.html"%}89</li>
+                     {% include "includes/website_index/comment_svg.html"%} 
+                     {% load disqus_tags %}
+<a href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.id }}"></a>
+
+{% disqus_num_replies %}
+
+                   </li>
                 </ul>
                 {%if post.photos %}                                  
                   <img src="{{post.photos.url}}" >
@@ -94,14 +97,24 @@
                     <li>
                       <i style="color: #4ECDC4;" class="color-primary mr-5 font-12 fa fa-flash"></i>30,190
                     </li>
-                    <li> {% include "includes/website_index/comment_svg.html"%}89</li>
+                    <li> 
+                      {% include "includes/website_index/comment_svg.html"%}             
+                      {% load disqus_tags %}
+                      <a href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.id }}"></a>
+                    {% disqus_num_replies %}
+                  </li>
                   </ul>
                 </div><!-- col-sm-4 -->
               {%endfor%}
             </div>
           {% endif%}
+          
+          <div class="brdr-ash-1 opacty-5"></div>
+            <h4 class="p-title mt-50"><b>COMMENTS</b></h4>
+        {%block disqus%}
+        {%endblock%}
         
-        
+
         </div>
         
 

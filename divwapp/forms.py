@@ -58,18 +58,15 @@ class PostForm(forms.ModelForm):
     """ create a form to generate Posts"""
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Please Select A Category")
     content  = forms.CharField(min_length=100, widget=forms.Textarea(attrs={"class":"wysihtml5  form-control", 'rows':"30"}))
-    header1  = forms.CharField(label=_("First Heading"),validators=[RegexValidator(regex=r'^[\w\s_\d\.\&]+$', message="Invalid characters used")],
-                             required=False, widget=forms.TextInput(attrs={'class':"form-control round-form"}), help_text='please use letters or numbers  and spaces',)
-    post_by= forms.ModelChoiceField(label=_("Author"), widget=forms.HiddenInput, queryset=User.objects.all(),required=False, initial='p')
-    topic  = forms.CharField(validators=[RegexValidator(regex=r'^[\w\s_\d\.\&]+$', message="Invalid characters used")],
+    post_by=   forms.ModelChoiceField(label=_("Author"), widget=forms.HiddenInput, queryset=User.objects.all(),required=False, initial='p')
+    topic  =   forms.CharField(validators=[RegexValidator(regex=r'^[\w\s_\d\.\&]+$', message="Invalid characters used")],
                              required=False, widget=forms.TextInput(attrs={'class':"form-control round-form"}), help_text='please use letters or numbers and spaces',)
-    photos = forms.ImageField(label=_("Select an Image to Upload"), help_text='required field')
-    links  = forms.URLField(label=_('Add your http link'), required=False, widget=forms.TextInput(attrs={"class":"form-control round-form"}), help_text="for video download or youtube link"
-        )
+    photos =   forms.ImageField(label=_("Select an Image to Upload"), help_text='required field')
+
 
     class Meta:
         model = Post
-        fields = ("category","topic", "header1", "content", "photos", 'links', 'post_by')
+        fields = ("category","topic", "content", "photos",  'post_by')
 
     def clean_photos(self):
         image_field = self.cleaned_data.get('photos')
@@ -101,13 +98,6 @@ class PostForm(forms.ModelForm):
         return your_post
 
         
-
-        
-
-
-            
-
-
 class ProfileForm(forms.ModelForm):
     bio = forms.CharField(widget=forms.Textarea(), max_length=100, help_text='use less than 101 characters')
     class Meta:

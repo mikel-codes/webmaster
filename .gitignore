@@ -1,0 +1,8 @@
+*.pyc
+*.sqlite3
+*.py[cod]
+.env
+__pycache__/
+__pycache__
+requirements.txt
+Procfile

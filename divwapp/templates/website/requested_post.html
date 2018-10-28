@@ -4,33 +4,34 @@
   {{req_post.topic}}
 {%endblock%}
 {% block content %}
-
- 
-    <h3 class="mt-30"><b>{{req_post.topic}}</b></h3>
-    <ul class="list-li-mr-20 mtb-15">
-      <li>
-        by <b>{{ author | capfirst | safe }} </b>
-        {{ req_post.last_modified }}
-      </li>
-      <li>
-        <i style="color: #4ECDC4;" class="color-primary mr-5 font-12 fa fa-flash"></i>30
-      </li>
-      <li>
-      {% include "includes/website_index/comment_svg.html"%}89
-      </li>
-    </ul>
-
-    <img src="{{ req_post.photos.url }}" alt=""  height="400" width="400" />
-
-
-    <h4><b>{{req_post.header1 |safe}}</b></h4>
-    <p class="mtb-15" style="color:#222">{{ req_post.content | safe }}</p>
-    <a href="{{req_post.absolute_url}}#disqus_thread"> Post A Comment </a>
- <script id="dsq-count-scr" src="//divweb-project-herokuapp-com.disqus.com/count.js" async></script>
+<h3 class="mt-30"><b>{{req_post.topic}}</b></h3>
+<ul class="list-li-mr-20 mtb-15">
+  <li>
+    by <b>{{ author | capfirst | safe }} </b>
+    {{ req_post.last_modified }}
+  </li>
+  <li>
+    <i style="color: #4ECDC4;" class="color-primary mr-5 font-12 fa fa-flash"></i>30
+  </li>
+  <li>
+    {% include "includes/website_index/comment_svg.html"%}89
+  </li>
+</ul>
+<img src="{{ req_post.photos.url }}" alt=""  height="400" width="400" />
+<h4><b>{{req_post.header1 |safe}}</b></h4>
+<p class="mtb-15" style="color:#222">{{ req_post.content | safe }}</p>
+<style type="text/css">
+  p a{ color: indigo; 
+    text-decoration: underline;}
+</style>
 
 {% endblock %}
 
-{% block disqus %}
-{% include "disqus.html" %}
-{% endblock %}
+{%block disqus%}
+{% load disqus_tags %}
+
+{% disqus_num_replies %}
+{% load disqus_tags %}
+{% disqus_show_comments %}
+{%endblock%}
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-
+from itertools import chain
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -33,14 +33,15 @@ def index(request):
         head_post = Post.objects.latest()
     except:
         head_post = None
-    top_posts = Post.objects.order_by("topic", 'category','last_modified').exclude(pk=head_post.id)[:6]
-    recent_posts = Post.objects.all().exclude(pk=head_post.id)[0:10]
     related_posts_first = Post.objects.filter(category=head_post.category).order_by("topic", "last_modified").exclude(pk=head_post.id)[:2]
+    recipe_for_head = Post.objects.filter(pk=head_post.id)
+
+    top_posts = Post.objects.order_by("topic", 'category','last_modified').exclude(id__in=[x.id for x in list(chain(related_posts_first, recipe_for_head))])[:3]
+    recent_posts = Post.objects.all().exclude(id__in=[p.id for p in list(chain(related_posts_first, top_posts, recipe_for_head))])[:10]
     category = random.choice(Category.objects.all())
     category_posts = Post.objects.filter(category=category).order_by("last_modified", "post_by").exclude(pk=head_post.id)[:4]
     categories = Category.objects.all()
     return render(request, "index.html", locals())
-
 
 
 def list_posts(request, cat_name=None):
@@ -52,8 +53,9 @@ def list_posts(request, cat_name=None):
 
 def getpost(request, slug=None):
     req_post = get_object_or_404(Post, slug=slug)
-    posts    = Post.objects.all().exclude(pk=req_post.id)[:6]
     related_posts = Post.objects.filter(category=req_post.category).exclude(pk=req_post.id)[:6]
+    recipe_for_req = Post.objects.filter(pk=req_post.id)
+    posts    = Post.objects.all().exclude(id__in=[c.id for c in list(chain(related_posts, recipe_for_req))])[:5]
     categories = Category.objects.all()
     head_post = Post.objects.all().first()
     last_p = Post.objects.latest()
@@ -197,11 +199,10 @@ def dashboard(request,  username):
 		profile = get_object_or_404(UserProfile, author=user)
 	except Exception as e:
 		profile = None
-
 	context = {'post_count': count, "posts":posts, "profile":profile }
 	return render(request, 'layouts/dashboard.html', context)
 
-@login_required 
+@login_required(login_url='signin')
 def userlogout(request):
     """ simply logs out the user """
     logout(request)
@@ -220,7 +221,6 @@ def create_content(request):
             return redirect(reverse("dashboard", args=(request.user.username,)))
     else:
         form = PostForm(request)
-
     return render(request, "dashboard/user_content.html", {'form': form, 'subvalue':"Create Post"})
 
 

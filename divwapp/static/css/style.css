@@ -227,7 +227,9 @@ a, a:hover, a:focus {
     border-radius: 100%;
 }
 
-
+p > a {
+  color: skyblue;
+}
 .button {
     display: inline-block;
     position: relative;
