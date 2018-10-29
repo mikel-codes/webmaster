@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-
+from itertools import chain
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -17,7 +17,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage, send_mail, BadHeaderError
-from django.db.models.functions import Lower
+
 
 
 from .forms import  SignUpForm, ResetPasswordForm, PostForm, ProfileForm, ContactForm
@@ -29,35 +29,40 @@ from .models import Post, UserProfile, Category
 # Create your views here.
 
 def index(request):
-    head_post = Post.objects.latest()
-    top_posts = Post.objects.order_by("topic", 'category','last_modified').exclude(pk=head_post.id)[:6]
-    recent_posts = Post.objects.all().exclude(pk=head_post.id)[0:10]
+    try:
+        head_post = Post.objects.latest()
+    except:
+        head_post = None
     related_posts_first = Post.objects.filter(category=head_post.category).order_by("topic", "last_modified").exclude(pk=head_post.id)[:2]
+    recipe_for_head = Post.objects.filter(pk=head_post.id)
+
+    top_posts = Post.objects.order_by("topic", 'category','last_modified').exclude(id__in=[x.id for x in list(chain(related_posts_first, recipe_for_head))])[:3]
+    recent_posts = Post.objects.all().exclude(id__in=[p.id for p in list(chain(related_posts_first, top_posts, recipe_for_head))])[:10]
     category = random.choice(Category.objects.all())
     category_posts = Post.objects.filter(category=category).order_by("last_modified", "post_by").exclude(pk=head_post.id)[:4]
     categories = Category.objects.all()
     return render(request, "index.html", locals())
 
 
-
-def list_posts(request, pk=None):
-    category = get_object_or_404(Category, name=pk)
+def list_posts(request, cat_name=None):
+    category = get_object_or_404(Category, name=cat_name)
     posts_by_category = Post.objects.filter(category=category)
     head_post = Post.objects.all().first()  
     categories = Category.objects.all()
     return render(request, "website/category_posts.html", locals())
 
-def getpost(request, pk=None):
-    req_post = get_object_or_404(Post, topic=pk)
-    posts    = Post.objects.all().exclude(pk=req_post.id)[:6]
+def getpost(request, slug=None):
+    req_post = get_object_or_404(Post, slug=slug)
     related_posts = Post.objects.filter(category=req_post.category).exclude(pk=req_post.id)[:6]
+    recipe_for_req = Post.objects.filter(pk=req_post.id)
+    posts    = Post.objects.all().exclude(id__in=[c.id for c in list(chain(related_posts, recipe_for_req))])[:5]
     categories = Category.objects.all()
     head_post = Post.objects.all().first()
     last_p = Post.objects.latest()
     try:
         profile = get_object_or_404(UserProfile, pk=req_post.post_by)
     except:
-        profile=None
+        profile="Anonymous"
     return render(request, "website/requested_post.html", locals())
 
 
@@ -84,13 +89,14 @@ def email_password_reset(request):
             "uid" : urlsafe_base64_encode(force_bytes(user.pk)).decode(),
             "token" : account_activation_token.make_token(user)
         })
-        EmailMessage("Please use the Reset link ",
+
+        mail = EmailMessage("Please use the Reset link ",
             message,
-            ['boss.com'],
-            to=[email]
-            ).send()
-    except (BadHeaderError, ValueError, Exception):
-        messages.info(request,"sent link to email ! Bross Pls remember to check me before sending")
+            to=[email],headers = {'Reply-To': 'noreply@divweb.com'}
+            )
+        mail.send()
+    except(BadHeaderError, ValueError, Exception):
+        messages.info(request,"sent link to email ")
         return redirect("signin")
     else:
         messages.info(request, "Sent Link to Email Address ")
@@ -118,7 +124,7 @@ def registration(request):
             user.is_active = False
             user.save()
             current_site = get_current_site(request)
-            mail_subject = "Please Confirm Your Email To Activate Your Account :)"
+            mail_subject = "Account Activation"
 
             mail_message = render_to_string("activate_acct_mail.html", {
                 'user': user,
@@ -128,9 +134,10 @@ def registration(request):
                 })
 
             to_email = signupform.cleaned_data.get('email')
-            email = EmailMessage( mail_subject, mail_message, to=[to_email])
+            email=EmailMessage( mail_subject, mail_message, to=[to_email] ,
+                 headers = {'Reply-To': 'noreply@divweb.com'})
             email.send()
-            return HttpResponse('Please check email')
+            return HttpResponse('PLEASE CHECK EMAIL FOR FURTHER INSTRUCTIONS')
 
     else: 
         signupform = SignUpForm()
@@ -184,63 +191,45 @@ def reset(request):
     pass
 
 @login_required(login_url = "signin")
-def dashboard(request,  pk):
-	user = get_object_or_404(User, username=pk)
-	posts = Post.objects.filter(post_by=user.id).order_by(Lower("last_modified").desc())
+def dashboard(request,  username):
+	user = get_object_or_404(User, username=username)
+	posts = Post.objects.filter(post_by=user.id).order_by("-last_modified")
 	count = posts.count()
 	try:	
 		profile = get_object_or_404(UserProfile, author=user)
 	except Exception as e:
 		profile = None
-
 	context = {'post_count': count, "posts":posts, "profile":profile }
 	return render(request, 'layouts/dashboard.html', context)
 
-@login_required 
+@login_required(login_url='signin')
 def userlogout(request):
     """ simply logs out the user """
     logout(request)
     return redirect(reverse("signin"))
 
-@login_required 
-def message_to_user(request):
-    """ to send emails only for authorized persons"""
-    from forms import MessageForm 
-    if request.POST:
-        msgForm = MessageForm(request, data=request.POST)
-        if msgForm.is_valid():
-            msgForm.save()
-    else:
-        msgForm = MessageForm(request)
-    context = {"msgForm" : msgForm}
-    return render(request, "email_user.html", context)
 
 
 @login_required(login_url="signin")
 def create_content(request):
     """ Create content to be displayed"""
     if request.method == "POST":
-        form = PostForm(request.POST, request.FILES)    
+        form = PostForm(request, request.POST, request.FILES)    
         if form.is_valid():
-            obj_form = form.save(commit=False)
-            obj_form.post_by = request.user
-            obj_form.save()
+            form.save()
             messages.info(request, "Your post was added successfully")
             return redirect(reverse("dashboard", args=(request.user.username,)))
     else:
-        form = PostForm()
-
+        form = PostForm(request)
     return render(request, "dashboard/user_content.html", {'form': form, 'subvalue':"Create Post"})
 
 
 @login_required(login_url='signin')
 def edit_post(request, pk):
    post = get_object_or_404(Post, pk=pk)
-   form = PostForm(request.POST or None,request.FILES or None, instance=post)
+   form = PostForm(request, request.POST or None,request.FILES or None, instance=post)
    if form.is_valid():
-        obj_form = form.save(commit=False)
-        obj_form.post_by = request.user
-        obj_form.save()
+        form.save()
         messages.info(request, "Post is updated successfully")
         return redirect(reverse("dashboard", args=(request.user.username,)))
    return render(request, "dashboard/user_content.html", {'form': form, 'subvalue': "Update Post", "post":post})

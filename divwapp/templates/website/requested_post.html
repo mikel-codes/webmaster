@@ -1,33 +1,37 @@
 {# template website/popular_posts.html #}
 {% extends "layouts/base.html" %}
 {%block title%}
-{{req_post.topic}}
+  {{req_post.topic}}
 {%endblock%}
 {% block content %}
+<h3 class="mt-30"><b>{{req_post.topic}}</b></h3>
+<ul class="list-li-mr-20 mtb-15">
+  <li>
+    by <b>{{ author | capfirst | safe }} </b>
+    {{ req_post.last_modified }}
+  </li>
+  <li>
+    <i style="color: #4ECDC4;" class="color-primary mr-5 font-12 fa fa-flash"></i>30
+  </li>
+  <li>
+    {% include "includes/website_index/comment_svg.html"%}89
+  </li>
+</ul>
+<img src="{{ req_post.photos.url }}" alt=""  height="400" width="400" />
+<h4><b>{{req_post.header1 |safe}}</b></h4>
+<p class="mtb-15" style="color:#222">{{ req_post.content | safe }}</p>
+<style type="text/css">
+  p a{ color: indigo; 
+    text-decoration: underline;}
+</style>
 
-  {% autoescape on %}
-   <h3 class="mt-30"><b>{{req_post.topic}}</b></h3>
-      <ul class="list-li-mr-20 mtb-15">
-        <li>
-          by <b>{{ author | capfirst }} </b>
-          {{ req_post.last_modified }}
-        </li>
-        <li>
-          <i style="color: #4ECDC4;" class="color-primary mr-5 font-12 fa fa-flash"></i>30
-        </li>
-        <li>
-          <i class="color-primary mr-5 font-12 fa fa-comments"></i>30
-        </li>
-      </ul>
-      
-      <img src="{{ req_post.photos.url }}" alt=""  height="500" width="450" />
-      
+{% endblock %}
 
-      <h4><b>{{req_post.header1}}</b></h4>
-      <p class="mtb-15" style="color:#222">
-      {{ req_post.content}}
+{%block disqus%}
+{% load disqus_tags %}
 
-    </p>
-    {% endautoescape%}
-  {% endblock %}
+{% disqus_num_replies %}
+{% load disqus_tags %}
+{% disqus_show_comments %}
+{%endblock%}
 

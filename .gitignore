@@ -1,7 +1,8 @@
 *.pyc
+*.py[cod]
 db.sqlite3
 myvenv
-__pycache__
+divwapp/__pycache__/
 Procfile
 .env
 

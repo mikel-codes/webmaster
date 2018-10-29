@@ -1,4 +1,8 @@
+
 {% autoescape on %}
-Hi {{user.username}}
+Hi {{user.get_full_name}}
+USE THIS LINK TO COMPLETE YOUR EMAIL REGISTRATION
 http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
 {% endautoescape %}
+
+

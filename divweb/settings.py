@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import dj_database_url
+from decouple import config
 import django_heroku 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,13 +23,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'p28b36!teakw2^2@o&ylx2wo*k=ao_ot4$fk&rfyy*=s!pv9sr'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
+#
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -37,8 +45,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'divwapp',
+  
+
+    # Disable Django's own staticfiles handling in favour of WhiteNoise, for
+    # greater consistency between gunicorn and `./manage.py runserver`. See:
+    # http://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
+    #'whitenoise.runserver_nostatic',
+    'disqus',
+    'django.contrib.sites'
+   
 ]
+
+DISQUS_API_KEY=config('DISQUS_API_KEY')
+DISQUS_WEBSITE_SHORTNAME=config('DISQUS_WEBSITE_SHORTNAME')
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -106,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'GMT'
 
 USE_I18N = True
 
@@ -114,24 +137,81 @@ USE_L10N = True
 
 USE_TZ = True
 
+"""
+#set S3 as the place to store your files.
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+STATICFILES_STORAGE  = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = "AKIAI5GXJS5FIQ2TRZQA"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "divweb-assets"
+
+#AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "")
+
+AWS_QUERYSTRING_AUTH = False #This will make sure that the file URL does not have unnecessary parameters like your access key.
+
+AWS_S3_CUSTOM_DOMAIN = AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com'
+#static media settings
+STATIC_URL = 'https://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
+MEDIA_URL = STATIC_URL + 'media/'
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, "static"), )
+STATIC_ROOT = 'staticfiles'
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+STATICFILES_FINDERS = (
+'django.contrib.staticfiles.finders.FileSystemFinder',
+'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+
+"""
+
+
+
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400',}
+AWS_STATIC_LOCATION = 'static'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'divwapp/static'),
+]
+
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, "media")
+
+# AWS CUSTOMISED FILE STORAGE LOCATIONS AND PERMISSIONS
+STATICFILES_STORAGE = 'divweb.aws_storage_backends.StaticStorage' 
+
+DEFAULT_FILE_STORAGE = 'divweb.aws_storage_backends.PublicMediaImageStorage'
+
+PRIVATE_FILE_STORAGE = 'divweb.aws_storage_backends.PrivateMediaImageStorage'
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#STATIC_URL = '/static/'
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER', '')
-EMAIL_PORT = os.environ.get('MAILGUN_SMTP_PORT', '')
-EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN', '')
-EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD', '')
+EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME')
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'info@divweb.com'
 
-django_heroku.settings(locals())
-
+#django_heroku.settings(locals())
+"""
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+DEFAULT_FROM_EMAIL = 'info@divweb.com'
+"""
 """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True

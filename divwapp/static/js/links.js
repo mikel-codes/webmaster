@@ -27,7 +27,7 @@ $(document).ready(function(){
 
   // body...
   jQuery(document).ready(function($){
-  	http://localhost:8000/site/home/1#
+  
      $("span#momentum").each(function(){
     var i = $(this).text();
     var m = moment(i.trim());
@@ -57,6 +57,12 @@ $(document).ready(function(){
 			
 		});
 	}
+
+$("a.color-white").each(function(){
+	$(this).bind('click', function(){
+		$(this).addClass(" active")
+	})
+})
 
 
  

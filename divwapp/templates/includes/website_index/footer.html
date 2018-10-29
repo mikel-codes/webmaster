@@ -66,7 +66,7 @@
               <h5 class="color-primary mb-20"><b>EXPLORE</b></h5>
               <div class="mb-20">
                 {% if head_post  %}
-                <a class="color-white" href="{% url "getpost" head_post.topic %}">
+                <a class="color-white" href="{% url "getpost" head_post.slug %}">
                   <b>
                     {{head_post.topic}} 
                   </b>
@@ -76,9 +76,9 @@
               </div>
               {%if last_p%}
               <div class="brdr-ash-1 opacty-2 mr-30"></div>
-
+             
               <div class="mt-20">
-                <a class="color-white" href="{% url "getpost" last_p.topic %}">
+                <a class="color-white" href="{% url "getpost" last_p.slug %}">
                   <b>
                     {{last_p.topic}}
                   </b></a>

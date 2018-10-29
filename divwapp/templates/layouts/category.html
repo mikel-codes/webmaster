@@ -4,17 +4,16 @@
   <head>
     <title>{%block title%}{%endblock%}</title>
     {% include "includes/website_index/static_files.html" %}
+        {%include "includes/ads.html"%}
+
   </head>
   <body>
     <header>
       {%include "includes/website_index/navs.html" %}
     </header>
-    <section>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-lg-8">
-            <div class="brdr-ash-1 opacty-5"></div>
 
+        <div class="container">
+          <div class="col-md-12 col-lg-8">
             {% block content %}
 
             {% endblock %}

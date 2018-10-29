@@ -2,11 +2,11 @@
 <script type="text/javascript">
   jQuery(document).ready(function($){
     $(".nav > p").each(function(){
-      if ($(this).on('click',function() {
+      $(this).on('click',function(e) {
+        e.preventDefault();
         $(this).css({"color": "#3c4858;"});
-    })
-  })
-    })
+      });
+    });
   });
   </script>
 <ul class="nav">
